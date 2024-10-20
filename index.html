@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        header {
+            background-color: #d33808;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        header h1 {
+            margin: 0;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 80%;
+            max-width: 1200px;
+            justify-content: center;
+        }
+        .project-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+        .project-card h2 {
+            margin: 0 0 10px 0;
+        }
+        .project-card p {
+            color: #555;
+        }
+        .project-card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #d33808;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .project-card a:hover {
+            background-color: #d33808;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 10px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>My Projects</h1>
+</header>
+
+<main>
+
+    <div class="project-card">
+        <h2>Project 1: Word Frequency Analyzer</h2>
+        <p>An application that analyzes the frequency of words in a text file. Uses C++ and WebAssembly for in-browser execution.</p>
+        <a href="" target="_blank">View Project</a>
+    </div>
+
+    <div class="project-card">
+        <h2>Project 2: Chat</h2>
+        <p>A simple chat app where users can create chats, send messages with animated elements and dynamic chat management.</p>
+        <a href="" target="_blank">View Project</a>
+    </div>
+
+</main>
+</body>
+</html>
