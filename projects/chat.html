@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #1e1f24;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e1f24 0%, #2d2e35 100%);
+        }
+
+        .welcome-screen {
+            background-color: rgba(40, 42, 54, 0.8);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 90%;
+            width: 400px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #a8b2d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0084ff 0%, #0073e6 100%);
+            border-radius: 20px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            transform: rotate(-5deg);
+            box-shadow: 0 4px 15px rgba(0, 132, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: rotate(-5deg) translateY(0);
+            }
+            50% {
+                transform: rotate(-5deg) translateY(-10px);
+            }
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 15px;
+            top: 0;
+            font-size: 0.8rem;
+            color: #8e8e8e;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            transform: translateY(-50%);
+            background: #282a36;
+            padding: 0 5px;
+        }
+
+        .welcome-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background-color: rgba(54, 56, 66, 0.5);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-input:focus {
+            outline: none;
+            border-color: #0084ff;
+            background-color: rgba(54, 56, 66, 0.8);
+            box-shadow: 0 0 0 4px rgba(0, 132, 255, 0.1);
+        }
+
+        .welcome-button {
+            background: linear-gradient(135deg, #0084ff 0%, #0073e6 100%);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .welcome-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 132, 255, 0.4);
+        }
+
+        .welcome-button:active {
+            transform: translateY(0);
+        }
+
+        .welcome-footer {
+            margin-top: 2rem;
+            color: #8e8e8e;
+            font-size: 0.9rem;
+        }
+		
+        .chat-container {
+            width: 90%;
+            height: 90vh;
+            background-color: #282a36;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .chat-list {
+            width: 300px;
+            background-color: #282a36;
+            border-right: 1px solid #363842;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #363842;
+        }
+
+        .chat-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .exit-button {
+            background-color: #ff4444;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+
+        .new-chat-input {
+            margin: 10px 20px;
+            padding: 10px;
+            background-color: #363842;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .chat-items {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .chat-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .chat-item:hover {
+            background-color: #363842;
+        }
+
+        .chat-item.active {
+            background-color: #0084ff;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #404250;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .chat-info {
+            flex-grow: 1;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+
+        .chat-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1f24;
+        }
+
+        .main-header {
+            padding: 20px;
+            background-color: #282a36;
+            border-bottom: 1px solid #363842;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-header .avatar {
+            margin-right: 15px;
+        }
+
+        .status {
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+
+        .messages-container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .welcome-emoji {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        .no-messages {
+            color: #8e8e8e;
+            font-size: 16px;
+        }
+
+        .message {
+            max-width: 70%;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+        .message.sent {
+            background-color: #0084ff;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.received {
+            background-color: #363842;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-input-container {
+            padding: 20px;
+            background-color: #282a36;
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #363842;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .message-input:focus {
+            outline: none;
+            background-color: #404250;
+        }
+
+        .send-button {
+            background-color: #0084ff;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: #0073e6;
+        }
+
+        .send-button:disabled {
+            background-color: #404250;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-logo">💬</div>
+        <h1>Welcome Back</h1>
+        <div class="input-group">
+            <label for="usernameInput">Username</label>
+            <input 
+                type="text" 
+                id="usernameInput" 
+                class="welcome-input"
+                placeholder="Enter your username"
+                autocomplete="off"
+            >
+        </div>
+        <button class="welcome-button" onclick="enterChat()">
+            Start Chatting
+        </button>
+        <div class="welcome-footer">
+            Enter your username to begin messaging
+        </div>
+    </div>
+
+    <div class="chat-container" id="chatInterface" style="display: none;">
+        <div class="chat-list">
+            <div class="chat-header">
+                <div class="chat-header-content">
+                    <h2>Chats</h2>
+                    <button class="exit-button" onclick="exitChat()">Exit</button>
+                </div>
+                <input type="text" class="new-chat-input" placeholder="Type contact name and press Enter" onkeypress="handleNewChat(event)">
+            </div>
+            <div class="chat-items" id="chatItems">
+            </div>
+        </div>
+
+        <div class="chat-main">
+            <div class="main-header">
+                <div class="avatar" id="mainAvatar"></div>
+                <div class="chat-info">
+                    <div class="chat-name" id="mainChatName">Select a chat</div>
+                    <div class="status">Offline</div>
+                </div>
+            </div>
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <div class="welcome-emoji">👋</div>
+                    <div class="no-messages">Select a chat to start messaging</div>
+                </div>
+            </div>
+            <div class="message-input-container">
+                <input type="text" class="message-input" id="messageInput" placeholder="Type a message..." onkeypress="handleMessageInput(event)" disabled>
+                <button class="send-button" onclick="sendMessage()" id="sendButton" disabled>Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUsername = '';
+        let currentChat = '';
+        let chats = {};
+
+        function enterChat() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (username) {
+                currentUsername = username;
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('chatInterface').style.display = 'flex';
+            } else {
+                alert('Please enter a username');
+            }
+        }
+		
+		document.getElementById('usernameInput').addEventListener('focus', function() {
+            this.parentElement.querySelector('label').style.color = '#0084ff';
+        });
+
+        document.getElementById('usernameInput').addEventListener('blur', function() {
+            this.parentElement.querySelector('label').style.color = '#8e8e8e';
+        });
+
+        function exitChat() {
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.getElementById('chatInterface').style.display = 'none';
+            document.getElementById('usernameInput').value = '';
+            document.getElementById('chatItems').innerHTML = '';
+            currentUsername = '';
+            currentChat = '';
+            chats = {};
+        }
+
+        function handleNewChat(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const contactName = input.value.trim();
+                
+                if (contactName) {
+                    const initial = contactName.charAt(0).toUpperCase();
+                    const chatItem = createChatItem(initial, contactName);
+                    document.getElementById('chatItems').appendChild(chatItem);
+                    chats[contactName] = [];
+                    input.value = '';
+                }
+            }
+        }
+
+        function createChatItem(initial, name) {
+            const div = document.createElement('div');
+            div.className = 'chat-item';
+            div.innerHTML = `
+                <div class="avatar">${initial}</div>
+                <div class="chat-info">
+                    <div class="chat-name">${name}</div>
+                    <div class="chat-preview">Start chatting</div>
+                </div>
+            `;
+            
+            div.onclick = function() {
+                document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('mainAvatar').textContent = initial;
+                document.getElementById('mainChatName').textContent = name;
+                currentChat = name;
+                enableMessageInput();
+                displayMessages(name);
+                updateChatPreview(div, chats[name]);
+            };
+            
+            return div;
+        }
+
+        function enableMessageInput() {
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            messageInput.focus();
+        }
+
+        function handleMessageInput(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (message && currentChat) {
+                const messageObj = {
+                    text: message,
+                    sender: currentUsername,
+                    timestamp: new Date().toISOString()
+                };
+                
+                chats[currentChat].push(messageObj);
+                displayMessages(currentChat);
+                updateChatPreview(document.querySelector('.chat-item.active'), chats[currentChat]);
+                messageInput.value = '';
+            }
+        }
+
+        function displayMessages(chatName) {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+            
+            if (chats[chatName].length === 0) {
+                container.innerHTML = `
+                    <div class="welcome-message">
+                        <div class="welcome-emoji">✌️</div>
+                        <div class="no-messages">No messages yet</div>
+                    </div>
+                `;
+                return;
+            }
+
+            chats[chatName].forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${msg.sender === currentUsername ? 'sent' : 'received'}`;
+                messageDiv.textContent = msg.text;
+                container.appendChild(messageDiv);
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateChatPreview(chatItem, messages) {
+            if (messages && messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                const preview = chatItem.querySelector('.chat-preview');
+                preview.textContent = lastMessage.text.substring(0, 30) + (lastMessage.text.length > 30 ? '...' : '');
+            }
+        }
+
+        document.getElementById('usernameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                enterChat();
+            }
+        });
+    </script>
+</body>
+</html>
